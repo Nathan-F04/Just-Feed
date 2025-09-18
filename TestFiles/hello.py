@@ -2,6 +2,10 @@
 # hello.py
 print("Hello, world!")
 
+def print(message):
+    """Print a message."""
+    __builtins__['print'](message)
+
 # sum_example.py
 def add(a, b):
     """Add two numbers."""
