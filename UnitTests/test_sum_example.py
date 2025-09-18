@@ -1,5 +1,5 @@
 import unittest
-from testfiles.sum_example import add
+from TestFiles.sum_example import add
 
 class TestSumExample(unittest.TestCase):
     def test_add_positive(self):
