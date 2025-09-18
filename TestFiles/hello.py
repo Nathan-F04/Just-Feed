@@ -9,7 +9,7 @@ print("Hello, world!!")
 
 # sum_example.py
 def add(a, b):
-    """Add 2 numbers."""
+    """Add two numbers."""
     return a + b
 
 if __name__ == "__main__":
