@@ -2,11 +2,11 @@
 import unittest
 from io import StringIO
 import sys
-from TestFiles import hello
+from testfiles import hello
 
 class TestHelloWorld(unittest.TestCase):
     """Test class for hello world functionality."""
-    
+
     def test_hello_output(self):
         """Test hello output message."""
         captured_output = StringIO()
