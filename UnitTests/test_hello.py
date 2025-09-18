@@ -4,7 +4,7 @@ import sys
 
 class TestHelloWorld(unittest.TestCase):
     def test_hello_output(self):
-        from TestFiles import hello
+        from testfiles import hello
         captured_output = StringIO()
         sys.stdout = captured_output
         hello.print("Hello, world!")
