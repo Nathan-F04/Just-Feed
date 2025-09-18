@@ -2,7 +2,7 @@
 import unittest
 from io import StringIO
 import sys
-from testfiles import hello
+from TestFiles import hello
 
 class TestHelloWorld(unittest.TestCase):
     """Test class for hello world functionality."""
