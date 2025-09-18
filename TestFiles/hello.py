@@ -1,10 +1,11 @@
 """Hello module."""
 # hello.py
-print("Hello, world!")
 
-def print(message):
+def print_message(message):
     """Print a message."""
-    __builtins__['print'](message)
+    print(message)
+
+print("Hello, world!")
 
 # sum_example.py
 def add(a, b):
