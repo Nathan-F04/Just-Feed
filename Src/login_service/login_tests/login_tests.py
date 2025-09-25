@@ -1,7 +1,7 @@
 """Test File for Login Service"""
 
 import pytest
-from login import create_account
+from login_service import create_account
 
 @pytest.fixture(scope="function")
 def create_account_test():
