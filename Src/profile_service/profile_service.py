@@ -1,15 +1,16 @@
 """Module for the Profile setting service"""
 
 from fastapi import FastAPI, HTTPException, status
-from .schemas import User
+from .schemas import Account
 
 app = FastAPI()
-users: list[User] = []
-    
+accounts: list[Account] = []
+
 @app.put("/api/users/", status_code=status.HTTP_201_CREATED)
-def update_user(user: User):
-    for u in users:
-        if(u.user_id == user.user_id):
-            users[users.index(u)] = user 
-            return user
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+def update_account(account: Account):
+    """Test put method for altering an account"""
+    for a in accounts:
+        if a.account_id == account.account_id:
+            accounts[accounts.index(a)] = account
+            return account
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Account not found")
