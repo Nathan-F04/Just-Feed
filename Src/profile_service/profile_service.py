@@ -1,15 +1,13 @@
-"""Module for the profile setting service"""
+# app/main.py
 from fastapi import FastAPI, HTTPException, status
 from .schemas import User
 
-ProfileService = FastAPI()
-profiles: list[Profile] = []
-
-@app.put("/api/profile/", status_code=status.HTTP_201_CREATED)
-def update_profile(profile: Profile):
-    """Edits a profile in the profile list"""
-    for p in profiles:
-        if(p.profile_id == profile.profile_id):
-            profiles[profiles.index(p)] = profile 
-            return profile
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+app = FastAPI()
+users: list[User] = []
+    
+@app.post("/api/users", status_code=status.HTTP_201_CREATED)
+def add_user(user: User):
+    if any(u.user_id == user.user_id for u in users):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="user_id already exists")
+    users.append(user)
+    return user
