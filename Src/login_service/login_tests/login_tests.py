@@ -1,15 +1,15 @@
 """Test File for Login Service"""
 
-import pytest
-from login_service import create_account
+def user_payload(uid=1, name="John", email="john@example.com", password="gywefiyvweyvwueiyf"):
+    """Builder for login accounts object"""
+    return {"user_id": uid, "name": name, "email": email, "age": age, "password": password}
 
-@pytest.fixture(scope="function")
-def create_account_test():
+def test_create_account_ok(client):
     """Test post method for creating an account"""
-    account = {
-        "user_id" : 1,
-        "name" : "testuser",
-        "email" : "test@example.com",
-        "password" : "testPass1",
-    }
-    assert create_account(account) == account
+    result = client.post("/account/create")
+    assert result.status_code == 200
+    data = result.json()
+    assert data["user_id"] == 1
+    assert data["name"] == "John"
+    assert data["email"] == "john@example.com"
+    assert data["password"] == "gywefiyvweyvwueiyf"
