@@ -6,8 +6,8 @@ from .schemas import Setting
 app = FastAPI()
 settings: list[Setting] = []
 
-@app.put("/api/users/", status_code=status.HTTP_201_CREATED)
-def update_account(setting: Setting):
+@app.put("/api/users/{acount_id}", status_code=status.HTTP_201_CREATED)
+def update_account(setting: Setting, account_id: int):
     """Test put method for altering an account"""
     for a in settings:
         if a.account_id == account_id:

@@ -1,7 +1,7 @@
 """Login test configs"""
 
 from fastapi.testclient import TestClient
-from login_service import app
+from login_service.login import app
 import pytest
 
 @pytest.fixture
