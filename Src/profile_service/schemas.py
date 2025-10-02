@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, EmailStr, constr
 
-class Account(BaseModel):
+class Settings(BaseModel):
     """Json input vailidation for User"""
     account_id: int
     name: constr(min_length=2, max_length=25)

@@ -2,7 +2,7 @@
 
 def user_payload(uid=1, name="John", email="john@example.com", password="gywefiyvweyvwueiyf"):
     """Builder for login accounts object"""
-    return {"user_id": uid, "name": name, "email": email, "age": age, "password": password}
+    return {"user_id": uid, "name": name, "email": email, "password": password}
 
 def test_create_account_ok(client):
     """Test post method for creating an account"""

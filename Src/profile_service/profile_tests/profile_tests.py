@@ -1,8 +1,8 @@
 """Test File for Profile Setting Service"""
 
-def user_payload(uid=1, name="John", email="john@example.com", age=25, password="gywefiyvweyvwueiyf"):
+def user_payload(uid=1, name="John", email="john@example.com", password="gywefiyvweyvwueiyf"):
     """Builder for login accounts object"""
-return {"user_id": uid, "name": name, "email": email, "password": password}
+    return {"user_id": uid, "name": name, "email": email, "password": password}
 
 def update_account_test():
     """Test post method for updating an account"""
