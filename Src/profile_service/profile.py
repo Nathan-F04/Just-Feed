@@ -11,7 +11,7 @@ def create_account(setting: Setting):
     """Addeds an account to the settings list"""
     if any(a.account_id == setting.account_id for a in settings):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Account already exists")
-    settings.append(setting)       
+    settings.append(setting)
     return setting
 
 @app.put("/api/users/{account_id}")
