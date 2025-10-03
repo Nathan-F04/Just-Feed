@@ -34,10 +34,6 @@ jobs:
       run: |
         pylint $(git ls-files '*.py')
 
-    - name: Test with pytest
-      run: |
-        pytest
-
     - name: Run tests with coverage and enforce threshold
       run: |
         pytest --cov=src --cov-fail-under=80 --cov-report=xml --cov-report=term-missing tests/

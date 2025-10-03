@@ -1,7 +1,7 @@
 """Profile test configs"""
 
 from fastapi.testclient import TestClient
-from profile_service.profile_service import app
+from src.profile_service.profile import app
 import pytest
 
 @pytest.fixture
