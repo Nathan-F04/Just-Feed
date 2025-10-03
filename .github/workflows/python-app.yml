@@ -38,9 +38,9 @@ jobs:
 
     - name: Run tests with coverage and enforce threshold
       env:
-        PYTHONPATH: .
+        PYTHONPATH: ${{ github.workspace }}
       run: |
-        pytest --cov=src --cov-fail-under=80 --cov-report=xml --cov-report=term-missing src/login_service/login_tests src/profile_service/profile_tests
+        pytest -q --cov=src --cov-fail-under=80 --cov-report=term-missing src/login_service/login_tests src/profile_service/profile_tests
 
     - name: Code Coverage Summary
       uses: irongut/CodeCoverageSummary@v1.3.0
