@@ -37,6 +37,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Run tests with coverage and enforce threshold
+      env:
+        PYTHONPATH: .
       run: |
         pytest --cov=src --cov-fail-under=80 --cov-report=xml --cov-report=term-missing src/login_service/login_tests src/profile_service/profile_tests
 
