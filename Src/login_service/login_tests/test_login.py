@@ -1,6 +1,6 @@
 """Test File for Login Service"""
 
-from src.login_service.login import accounts
+from Src.login_service.login import accounts
 
 def user_payload(uid=1, name="John", email="john@example.com", password="password"):
     """Builder for login accounts object"""
