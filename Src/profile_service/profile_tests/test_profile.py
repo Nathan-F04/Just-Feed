@@ -1,6 +1,6 @@
 """Test File for Profile Setting Service This is a test file that will be removed"""
 
-from src.profile_service.profile import settings
+from Src.profile_service.profile import settings
 
 def user_payload(uid=1, name="John", email="john@example.com", password="gywefiyvweyvwueiyf"):
     """Builder for login accounts object"""
