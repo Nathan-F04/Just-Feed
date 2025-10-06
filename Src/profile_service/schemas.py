@@ -1,5 +1,5 @@
 """Validation for Profile Setting Service"""
-
+import pytest
 from pydantic import BaseModel, EmailStr, constr
 
 class Account(BaseModel):

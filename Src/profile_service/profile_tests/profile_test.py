@@ -1,6 +1,7 @@
 """Test File for Profile Setting Service"""
 import pytest
-from profile_service import update_account
+from profile_service.profile_service import update_account
+
 
 @pytest.fixture(scope="function")
 def update_account_test():
@@ -12,3 +13,4 @@ def update_account_test():
         "password" : "testPass1",
     }
     assert update_account(account) == account
+    
