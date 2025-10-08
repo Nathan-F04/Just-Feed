@@ -1,5 +1,6 @@
 """Test File for Banking Service"""
 
+import pytest
 from Src.banking_service.banking import bank_details
 
 def bank_account_details_payload(banking_id=1, name="Paul", email="pl@atu.ie", pin=1225, card=1234, balance=2):
@@ -52,3 +53,16 @@ def test_edit_account_details_404(client):
     result = client.put("/api/banking/2", json=bank_account_details_payload(name="pil"))
     assert result.status_code == 404
     bank_details.clear()
+
+#bad name
+
+@pytest.mark.parametrize("bad_email", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
+def test_bad_student_id_422(client, bad_email):
+    """tests invalid user ids throw 422 error"""
+    result = client.post("/api/banking", json=bank_account_details_payload(email=bad_email))
+    assert result.status_code == 422 # pydantic validation error
+    bank_details.clear()
+
+#bad pin
+
+#bad card
