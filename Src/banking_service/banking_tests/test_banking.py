@@ -3,7 +3,7 @@
 import pytest
 from Src.banking_service.banking import bank_details
 
-def bank_account_details_payload(banking_id=1, name="Paul", email="pl@atu.ie", pin=1225, card=1234, balance=2):
+def bank_account_details_payload(banking_id=1, name="Paul", email="pl@atu.ie", pin=1225, card="1000000000000000", balance=2):
     return {"banking_id": banking_id, "name": name, "email": email, "pin": pin, "card": card, "balance": balance}
 
 def test_create_bank_account_ok(client):
@@ -61,30 +61,30 @@ def test_edit_account_details_404(client):
 #     assert result.status_code == 422 # pydantic validation error
 #     bank_details.clear()
 
-# @pytest.mark.parametrize("bad_email", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
-# def test_bad_email_422(client, bad_email):
-#     """tests invalid user ids throw 422 error"""
-#     result = client.post("/api/banking", json=bank_account_details_payload(email=bad_email))
-#     assert result.status_code == 422 # pydantic validation error
-#     bank_details.clear()
+@pytest.mark.parametrize("bad_email", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
+def test_bad_email_422(client, bad_email):
+    """tests invalid user ids throw 422 error"""
+    result = client.post("/api/banking", json=bank_account_details_payload(email=bad_email))
+    assert result.status_code == 422 # pydantic validation error
+    bank_details.clear()
 
-# @pytest.mark.parametrize("bad_pin", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
-# def test_bad_pin_422(client, bad_pin):
-#     """tests invalid user ids throw 422 error"""
-#     result = client.post("/api/banking", json=bank_account_details_payload(pin=bad_pin))
-#     assert result.status_code == 422 # pydantic validation error
-#     bank_details.clear()
+@pytest.mark.parametrize("bad_pin", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
+def test_bad_pin_422(client, bad_pin):
+    """tests invalid user ids throw 422 error"""
+    result = client.post("/api/banking", json=bank_account_details_payload(pin=bad_pin))
+    assert result.status_code == 422 # pydantic validation error
+    bank_details.clear()
 
-# @pytest.mark.parametrize("bad_card", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
-# def test_bad_card_422(client, bad_card):
-#     """tests invalid user ids throw 422 error"""
-#     result = client.post("/api/banking", json=bank_account_details_payload(card=bad_card))
-#     assert result.status_code == 422 # pydantic validation error
-#     bank_details.clear()
+@pytest.mark.parametrize("bad_card", ["BADEMAIL123", "@123.ie", "BAD@", "badmail",-2, 0,1000000000000000])
+def test_bad_card_422(client, bad_card):
+    """tests invalid user ids throw 422 error"""
+    result = client.post("/api/banking", json=bank_account_details_payload(card=bad_card))
+    assert result.status_code == 422 # pydantic validation error
+    bank_details.clear()
 
-# @pytest.mark.parametrize("bad_balance", ["1BAL", "-2", "balance"])
-# def test_bad_balance_422(client, bad_balance):
-#     """tests invalid user ids throw 422 error"""
-#     result = client.post("/api/banking", json=bank_account_details_payload(balance=bad_balance))
-#     assert result.status_code == 422 # pydantic validation error
-#     bank_details.clear()
+@pytest.mark.parametrize("bad_balance", ["1BAL", -2, "balance"])
+def test_bad_balance_422(client, bad_balance):
+    """tests invalid user ids throw 422 error"""
+    result = client.post("/api/banking", json=bank_account_details_payload(balance=bad_balance))
+    assert result.status_code == 422 # pydantic validation error
+    bank_details.clear()
