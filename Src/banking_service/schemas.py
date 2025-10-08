@@ -9,5 +9,5 @@ class Bank_user(BaseModel):
     name: constr(min_length=2, max_length=50)
     email: EmailStr
     pin: conint(gt=1000, lt=9999)
-    card: constr(min_length=16, max_length=16, pattern="\\d{16}$") #Pyflask doesn't like raw strings hence the formatting
+    card: constr(min_length=16, max_length=16, pattern="\\d{16}$") # noqa: F722 #Pyflask doesn't like raw strings hence the formatting
     balance: conint(gt=0)
