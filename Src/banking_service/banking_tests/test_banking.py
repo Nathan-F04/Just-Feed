@@ -41,7 +41,6 @@ def test_delete_then_404(client):
 def test_edit_account_details_ok(client):
     """tests you can edit an existing user"""
     client.post("/api/banking", json=bank_account_details_payload(banking_id=2))
-    client.post("/api/banking/2", json=bank_account_details_payload())
     result1 = client.put("/api/banking/2", json=bank_account_details_payload(name="pil"))
     print(result1)
     assert result1.status_code == 200
@@ -53,13 +52,6 @@ def test_edit_account_details_404(client):
     result = client.put("/api/banking/2", json=bank_account_details_payload(name="pil"))
     assert result.status_code == 404
     bank_details.clear()
-
-# @pytest.mark.parametrize("bad_name", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
-# def test_bad_name_422(client, bad_name):
-#     """tests invalid user ids throw 422 error"""
-#     result = client.post("/api/banking", json=bank_account_details_payload(name=bad_name))
-#     assert result.status_code == 422 # pydantic validation error
-#     bank_details.clear()
 
 @pytest.mark.parametrize("bad_email", ["BADEMAIL123", "@123.ie", "BAD@", "badmail"])
 def test_bad_email_422(client, bad_email):
