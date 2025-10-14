@@ -7,23 +7,29 @@ from .schemas import Bank_user
 app = FastAPI()
 bank_details: list[Bank_user] = []
 
-@app.get("/api/banking")
-def get_all_bank_accounts():
-    return bank_details
+@app.get("/api/banking", response_model=list[BankUserRead])
+def get_all_bank_accounts(db: Session = Depends(get_db)):
+    stmt = select(BankUserDB).order_by(BankUserDB.id)
+    return list(db.execute(stmt).scalars())
 
-@app.get("/api/banking/{banking_id}")
-def get_bank_account_details(banking_id: int):
-    for u in bank_details:
-        if u.banking_id == banking_id:
-            return u
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="bank account not found")
+@app.get("/api/banking/{banking_id}", response_model=BankUserRead)
+def get_bank_account(banking_id: int, db: Session = Depends(get_db)):
+    bank_user = db.get(BankUserDB, banking_id)
+    if not bank_user:
+        raise HTTPException(status_code=404, detail="bank account not found")
+    return bank_user
 
-@app.post("/api/banking", status_code=status.HTTP_201_CREATED)
-def add_bank_account(bank_account: Bank_user):
-    if any(u.banking_id == bank_account.banking_id for u in bank_details):
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="bank_id already exists")
-    bank_details.append(bank_account)
-    return bank_account
+@app.post("/api/banking", response_model=BankUserRead, status_code=status.HTTP_201_CREATED)
+def add_bank_account(payload: BankUserCreate, db: Session = Depends(get_db)):
+    bank_user = BankUserDB(**payload.model_dump())
+    db.add(bank_user)
+    try:
+        db.commit()
+        db.refresh(bank_user)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="bank_id already exists")
+    return bank_user
 
 @app.put("/api/banking/{banking_id}", status_code=status.HTTP_200_OK)
 def edit_bank_account_details(banking_id: int, bank_account: Bank_user):
@@ -43,3 +49,4 @@ def delete_bank_account(banking_id: int):
             bank_details.remove(u)
             return
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User does not exist")
+

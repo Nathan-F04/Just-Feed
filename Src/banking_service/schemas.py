@@ -1,13 +1,26 @@
 """Validation for Profile Setting Service"""
 
-from pydantic import BaseModel, EmailStr, constr, conint
+# app/schemas.py
+from typing import Annotated
+from pydantic import BaseModel, EmailStr, Field, StringConstraints, ConfigDict
 
-pattern_str = "\\d{16}$"
+NameStr = Annotated[str, StringConstraints(min_length=2, max_length=50)]
+Cardstr = Annotated[str, StringConstraints(pattern=r"\\d{16}$")]
 
-class Bank_user(BaseModel):
-    banking_id: int
-    name: constr(min_length=2, max_length=50)
+class BankUserCreate(BaseModel):
+    name: NameStr
     email: EmailStr
-    pin: conint(gt=1000, lt=9999)
-    card: constr(min_length=16, max_length=16, pattern=pattern_str)
-    balance: conint(gt=0)
+    pin: int = Field(gt=1000)
+    card: Cardstr 
+    balance: int = Field(gt=0)
+
+class BankUserRead(BaseModel):
+    id: int
+    name: NameStr
+    email: EmailStr
+    pin: int = Field(gt=1000, lt=9999)
+    card: Cardstr
+    balance: int  = Field(gt=0)
+
+    model_config = ConfigDict(from_attributes=True)
+
