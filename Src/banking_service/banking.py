@@ -60,20 +60,31 @@ def edit_bank_account_details(banking_id: int, bank_account: Bank_user):
 def edit_bank_account_details(banking_id: int, payload: BankUserCreate, db: Session = Depends(get_db)):
     bank_user_changed = BankUserDB(**payload.model_dump())
     bank_user_original = get_bank_account(banking_id)
+    if bank_user_original.id == bank_user_changed.id:
+        try:
+            bank_user_original.name 
+            db.commit()
+            db.refresh(bank_user_changed)
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(status_code=409, detail="cannot edit bank details")
+        return bank_user_changed
+    else: 
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     # stmt = select(BankUserDB).where(BankUserDB.name == "patrick")
     # patrick = session.scalars(stmt).one()
     # patrick.addresses.append(Address(email_address="patrickstar@sqlalchemy.org"))
     # sandy_address.email_address = "sandy_cheeks@sqlalchemy.org"
 
-    # db.commit()
-    for u in bank_details:
-        if u.banking_id == banking_id:
-            if banking_id == bank_account.banking_id:
-                bank_details[bank_details.index(u)] = bank_account
-                return bank_account
-            else:
-                return {"message" : "Can't update user_id value"}
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    #db.commit()
+    # for u in bank_details:
+    #     if u.banking_id == banking_id:
+    #         if banking_id == bank_account.banking_id:
+    #             bank_details[bank_details.index(u)] = bank_account
+    #             return bank_account
+    #         else:
+    #             return {"message" : "Can't update user_id value"}
+    # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
 @app.delete("/api/delete/banking/{banking_id}", status_code=204)
 def delete_bank_account(banking_id: int):
