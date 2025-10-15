@@ -4,8 +4,8 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from banking_service.banking import app, get_db
-from banking_service.models import Base
+from Src.banking_service.banking import app, get_db
+from Src.banking_service.models import Base
 
 TEST_DB_URL = "sqlite+pysqlite:///:memory:"
 engine = create_engine(TEST_DB_URL, connect_args={"check_same_thread": False})
