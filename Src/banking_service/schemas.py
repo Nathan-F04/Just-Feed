@@ -23,4 +23,3 @@ class BankUserRead(BaseModel):
     balance: int  = Field(gt=0)
 
     model_config = ConfigDict(from_attributes=True)
-

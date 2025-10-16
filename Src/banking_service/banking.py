@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 
 from .bankingdb import engine, SessionLocal
@@ -46,25 +46,19 @@ def add_bank_account(payload: BankUserCreate, db: Session = Depends(get_db)):
 @app.put("/api/banking/{banking_id}", response_model=BankUserRead, status_code=status.HTTP_200_OK)
 def edit_bank_account_details(banking_id: int, payload: BankUserCreate, db: Session = Depends(get_db)):
     bank_user_changed = BankUserDB(**payload.model_dump())
-    bank_user_original = get_bank_account(banking_id)
-    if bank_user_original.id == bank_user_changed.id:
-        try:
-            bank_user_original.name = bank_user_changed.name
-            bank_user_original.email = bank_user_changed.email
-            bank_user_original.pin = bank_user_changed.pin
-            bank_user_original.card = bank_user_changed.card
-            bank_user_original.balance = bank_user_changed.balance
-            db.commit()
-            db.refresh(bank_user_changed)
-        except IntegrityError:
-            db.rollback()
-            raise HTTPException(status_code=409, detail="cannot edit bank details")
-        return bank_user_changed
-    else: 
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    try:
+        stmt = update(bank_user_changed).where(bank_user_changed.id == banking_id)
+        db.commit()
+        db.refresh(bank_user_changed)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="cannot edit bank details")
+    except:
+        HTTPException(status_code=404, detail="bank_id not found")
+    return bank_user_changed
 
-@app.put("/api/banking/", response_model=BankUserRead, status_code=status.HTTP_200_OK)
-def edit_bank_account_details(payload: BankUserCreate, db: Session = Depends(get_db)):
+@app.delete("/api/banking/", response_model=BankUserRead, status_code=status.HTTP_200_OK)
+def delete_bank_account_details(payload: BankUserCreate, db: Session = Depends(get_db)):
         bank_user_changed = BankUserDB(**payload.model_dump())
         db.delete(bank_user_changed)
         try:
