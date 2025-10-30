@@ -6,7 +6,7 @@ from annotated_types import Ge, Le
 from pydantic import BaseModel, EmailStr, ConfigDict, StringConstraints
 
 NameStr = Annotated[str, StringConstraints(min_length=2, max_length=50)]
-Cardstr = Annotated[str, StringConstraints(pattern=r"\\d{16}$")]
+Cardstr = Annotated[str, StringConstraints(pattern=r"^\d{16}$")]
 pinInt = Annotated[int, Ge(1000), Le(9999)]
 balanceInt = Annotated[int, Ge(1)]
 

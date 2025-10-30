@@ -1,6 +1,6 @@
 """Banking python file"""
 
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
@@ -8,19 +8,6 @@ from sqlalchemy.exc import IntegrityError
 from .bankingdb import engine, SessionLocal
 from .models import Base, BankUserDB
 from .schemas import BankUserCreate, BankUserRead, BankPartialUpdate
-
-#new imports
-from fastapi import FastAPI, Depends, HTTPException, status, Response
-from sqlalchemy import update
-from sqlalchemy.orm import Session
-from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import selectinload
-from .database import engine, SessionLocal
-from .models import Base, UserDB
-from .schemas import (
-    UserCreate, UserRead, UserPartialUpdate
-)
 
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
@@ -67,22 +54,24 @@ def add_bank_account(payload: BankUserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=409, detail="bank user already exists")
     return bank_user
 
-@app.put("/api/banking/{banking_id}", response_model=BankUserRead, status_code=status.HTTP_200_OK)
+@app.put("/api/banking/{banking_id}", response_model=BankUserRead)
 def edit_bank_account_details(banking_id: int, payload: BankUserCreate, db: Session = Depends(get_db)):
-    bank_user_id_check = db.get(BankUserDB, banking_id)
-    if not bank_user_id_check:
+    bank_user = db.get(BankUserDB, banking_id)
+    if not bank_user:
         raise HTTPException(status_code=404, detail="Bank id not found")
-    bank_user_changed = BankUserDB(**payload.model_dump())
+    # Update fields from payload
+    for key, value in payload.model_dump().items():
+        setattr(bank_user, key, value)
     try:
-        stmt = update(BankUserDB).where(BankUserDB.id == banking_id).values(id = bank_user_changed.id,
-        name=bank_user_changed.name, email=bank_user_changed.email, pin=bank_user_changed.pin,
-        card=bank_user_changed.card, balance=bank_user_changed.balance)
-        db.execute(stmt)
-        db.commit()
+        db.commit()       # ORM knows this is an update
+        db.refresh(bank_user)
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=409, detail="Bank user integrity error")
-    return bank_user_changed
+
+    return bank_user
+
+
 
 @app.patch("/api/banking/{banking_id}", response_model=BankUserRead)
 def partial_edit_user(banking_id: int, payload: BankPartialUpdate, db: Session = Depends(get_db)):
