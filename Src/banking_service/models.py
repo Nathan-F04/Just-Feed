@@ -7,7 +7,7 @@ class BankUserDB(Base):
     __tablename__ = "banking_users"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String, nullable=False)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
     email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     pin: Mapped[int] = mapped_column(Integer, nullable=False)
     card: Mapped[str] = mapped_column(String, unique=True, nullable=False)
