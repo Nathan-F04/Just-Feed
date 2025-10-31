@@ -1,12 +1,28 @@
 """Validation for Login Service"""
 
-from pydantic import BaseModel, EmailStr, constr
+from typing import Annotated
+from pydantic import BaseModel, EmailStr, ConfigDict, StringConstraints
 
-pattern_str = r"[a-z]"
+# ---------- Reusable type aliases ----------
+NameStr = Annotated[str, StringConstraints(min_length=2, max_length=25)]
+PasswordStr = Annotated[str, StringConstraints(min_length=5, max_length=50, pattern=r"[a-z]")]
 
 class Account(BaseModel):
     """Json input vailidation for Accounts"""
     user_id: int
-    name: constr(min_length=2, max_length=25)
+    name: NameStr
     email: EmailStr
-    password: constr(min_length=5, max_length=50, pattern=pattern_str)
+    password: PasswordStr
+
+# ---------- Accounts ----------
+class AccountCreate(BaseModel):
+    name: NameStr
+    email: EmailStr
+    password: PasswordStr
+
+class AccountRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    name: NameStr
+    email: EmailStr
+    password: PasswordStr
