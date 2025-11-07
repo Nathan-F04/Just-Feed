@@ -54,7 +54,7 @@ def add_bank_account(payload: BankUserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=409, detail="bank user already exists")
     return bank_user
 
-@app.put("/api/banking/{banking_id}", response_model=BankUserRead)
+@app.put("/api/banking/{bankng_id}", response_model=BankUserRead)
 def edit_bank_account_details(banking_id: int, payload: BankUserCreate, db: Session = Depends(get_db)):
     bank_user = db.get(BankUserDB, banking_id)
     if not bank_user:
