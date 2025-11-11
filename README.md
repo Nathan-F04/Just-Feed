@@ -18,11 +18,64 @@ source venv/Scripts/activate
 ### Installing dependancies
 
 ````bash
-pip install -r requirements.txt
+make install
 ````
 
 Run the following commdand when adding new libraries
 
 ````bash
-pip freeze > requirements.txt
+make freeze
+````
+
+### Starting application
+
+The start/run commands are formatted as "make start/run" followed by the service desired i.e. "bank":
+
+````bash
+make run bank
+````
+
+````bash
+make start bank:
+````
+
+````bash
+make run login
+````
+
+````bash
+make start login
+````
+
+````bash
+make run notification
+````
+
+````bash
+make start notification
+````
+
+````bash
+make run order
+````
+
+````bash
+make start order
+````
+
+````bash
+make run profile
+````
+
+````bash
+make start profile
+````
+
+````bash
+make stop
+````
+### Running tests
+
+````bash
+make test
 ````

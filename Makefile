@@ -19,9 +19,6 @@ start bank:
 	nohup python -m uvicorn $(BANK_APP) --host 0.0.0.0 --port 8000 --reload \
 	> .uvicorn.out 2>&1 & echo $$! > $(PID_FILE)
 	@echo "Uvicorn started (PID=$$(cat $(PID_FILE))) on http://localhost:8000"
-	
-	run bank:
-	python -m uvicorn $(BANK_APP) --host 0.0.0.0 --port 8000 --reload
 
 run login:
 	python -m uvicorn $(LOGIN_APP) --host 0.0.0.0 --port 8000 --reload
