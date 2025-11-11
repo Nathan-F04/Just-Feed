@@ -33,3 +33,12 @@ def test_login_inncorect_password(client):
 def test_login_404(client):
     result = client.post("/api/login/sign-in", json={"email": "john@eample.com", "password": "password"})
     assert result.status_code == 404
+
+def test_login_delete_ok(client):
+    client.post("/api/login/sign-in", json={"email": "john@eample.com", "password": "password"})
+    result = client.delete("/api/login/delete/1")
+    assert result.status_code == 204
+
+def test_login_delete_404(client):
+    result = client.delete("/api/login/delete/1")
+    assert result.status_code == 404
