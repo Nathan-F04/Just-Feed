@@ -19,3 +19,17 @@ def test_create_account_409(client):
     client.post("/api/login/sign-up", json=user_payload())
     result = client.post("/api/login/sign-up", json=user_payload())
     assert result.status_code == 409
+
+def test_login_ok(client):
+    client.post("/api/login/sign-up", json=user_payload())
+    result = client.post("/api/login/sign-in", json={"email": "john@example.com", "password": "password"})
+    assert result.status_code == 200
+
+def test_login_inncorect_password(client):
+    client.post("/api/login/sign-up", json=user_payload())
+    result = client.post("/api/login/sign-in", json={"email": "john@example.com", "password": "passstesttsxujr"})
+    assert result.status_code == 400
+
+def test_login_404(client):
+    result = client.post("/api/login/sign-in", json={"email": "john@eample.com", "password": "password"})
+    assert result.status_code == 404
