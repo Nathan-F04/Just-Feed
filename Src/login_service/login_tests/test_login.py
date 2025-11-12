@@ -42,3 +42,14 @@ def test_login_delete_ok(client):
 def test_login_delete_404(client):
     result = client.delete("/api/login/delete/1")
     assert result.status_code == 404
+
+def test_login_partial_update_ok(client):
+    client.post("/api/login/sign-up", json=user_payload())
+    result = client.patch("/api/login/patch/1", json={"password": "password123"})
+    assert result.status_code == 200
+    data = result.json()
+    assert data["password"] == "password123"
+
+def test_login_partial_update_404(client):
+    result = client.patch("/api/login/patch/2", json={"password": "password123"})
+    assert result.status_code == 404
