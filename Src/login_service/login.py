@@ -20,6 +20,22 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/api/login/view/{account_id}", response_model=AccountRead)
+def get_account_details_by_id(account_id: int, db: Session = Depends(get_db)):
+    """Returns user details using an id as an AccountRead"""
+    account = db.get(AccountDB, account_id)
+    if not account:
+        raise HTTPException(status_code=404, detail="bank account not found")
+    return account
+
+#List all account (For Debuging)
+@app.get("/api/login/view", response_model=list[AccountRead])
+def get_all_bank_accounts(db: Session = Depends(get_db)):
+    stmt = select(AccountDB).order_by(AccountDB.id)
+    result = db.execute(stmt)
+    account_list = result.scalars().all()
+    return account_list
+
 @app.post("/api/login/sign-up", response_model=AccountRead, status_code=status.HTTP_201_CREATED)
 def add_user(payload: AccountCreate, db: Session = Depends(get_db)):
     """Sign In method to create an account"""
