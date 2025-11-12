@@ -1,6 +1,6 @@
 """Validation for Login Service"""
 
-from typing import Annotated
+from typing import Annotated, Optional
 from pydantic import BaseModel, EmailStr, ConfigDict, StringConstraints
 
 # ---------- Reusable type aliases ----------
@@ -23,6 +23,12 @@ class AccountCreate(BaseModel):
 class AccountLogin(BaseModel):
     email: EmailStr
     password: PasswordStr
+
+class AccountPartialUpdate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    name: Optional[NameStr] = None
+    email: Optional[EmailStr] = None
+    password: Optional[PasswordStr] = None
 
 class AccountRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)

@@ -3,11 +3,11 @@
 from fastapi import FastAPI, HTTPException, status, Depends, Response
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import select, delete
+from sqlalchemy import select
 from .database import engine, SessionLocal
 from .models import Base, AccountDB
 from .schemas import (
-    AccountCreate, AccountLogin, AccountRead
+    AccountCreate, AccountLogin, AccountRead, AccountPartialUpdate
 )
 
 app = FastAPI()
@@ -54,3 +54,22 @@ def get_user_login(account_id: int, db: Session = Depends(get_db)) -> Response:
     db.delete(account)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+@app.patch("/api/login/patch/{account_id}", response_model=AccountRead)
+def partial_edit_login_details(account_id: int, payload: AccountPartialUpdate, db: Session = Depends(get_db)):
+    """Edit email, username, or password"""
+    account = db.query(AccountDB).filter(AccountDB.id == account_id).first()
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    
+    update_data = payload.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(account, key, value)
+    
+    try:
+        db.add(account)
+        db.commit()
+        db.refresh(account)
+    except IntegrityError:
+        db.rollback()
+    return account
