@@ -18,7 +18,7 @@ class CartItemCreate(BaseModel):
 class CartItemRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    item_name: str
+    item_name: str = Field(max_length=200)
     price: float
     quantity: int
 
@@ -37,7 +37,7 @@ class CartRead(BaseModel):
 class OrderItemRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    item_name: str
+    item_name: str = Field(max_length=200)
     price: float
     quantity: int
 
@@ -46,7 +46,7 @@ class OrderRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
     user_id: int
-    total_amount: float
+    total_amount: PositiveFloat
     status: str
     created_at: datetime
     items: List[OrderItemRead] = []
