@@ -6,6 +6,7 @@ def user_payload(name="John", email="john@example.com", password="password"):
 
 def test_create_account_ok(client):
     """Tests post method for creating an account"""
+    client.delete("/api/login/delete/1")
     result = client.post("/api/login/sign-up", json=user_payload())
     assert result.status_code == 201
     data = result.json()
@@ -49,7 +50,36 @@ def test_login_partial_update_ok(client):
     assert result.status_code == 200
     data = result.json()
     assert data["password"] == "password123"
+    client.delete("/api/login/delete/1")
 
 def test_login_partial_update_404(client):
-    result = client.patch("/api/login/patch/2", json={"password": "password123"})
+    result = client.patch("/api/login/patch/1", json={"password": "password123"})
     assert result.status_code == 404
+
+def test_login_view_account_by_id_ok(client):
+    client.post("/api/login/sign-up", json=user_payload())
+    result = client.get("/api/login/view/1")
+    assert result.status_code == 200
+    data = result.json()
+    assert data["name"] == "John"
+    assert data["password"] == "password"
+    assert data["email"] == "john@example.com"
+    client.delete("/api/login/delete/1")
+
+def test_login_view_account_by_id_404(client):
+    result = client.get("/api/login/view/1")
+    assert result.status_code == 404
+
+def test_login_get_all_account_when_empty(client):
+    result = client.get("/api/login/view")
+    assert result.status_code == 200
+    data = result.json()
+    assert data == []
+
+def test_login_get_all_account_with_value(client):
+    client.post("/api/login/sign-up", json=user_payload())
+    result = client.get("/api/login/view")
+    assert result.status_code == 200
+    data = result.json()
+    assert data == [{"id": 1, "name": "John", "email": "john@example.com", "password": "password"}]
+    client.delete("/api/login/delete/1")
