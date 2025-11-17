@@ -15,6 +15,12 @@ class CartItemCreate(BaseModel):
     price: PositiveFloat
     quantity: PositiveInt
 
+class OrderCreate(BaseModel):
+    user_id: PositiveInt
+    item_name: str = Field(min_length=1, max_length=100)
+    price: PositiveFloat
+    quantity: PositiveInt
+
 class CartItemRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int

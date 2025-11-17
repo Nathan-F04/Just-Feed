@@ -9,7 +9,7 @@ from .database import engine, SessionLocal
 from .models import Base, CartDB, CartItemDB, OrderDB, OrderItemDB
 from .schemas import (
     CartItemCreate, CartItemRead, CartItemUpdate, CartRead,
-    OrderRead, OrderStatusUpdate
+    OrderCreate, OrderRead, OrderStatusUpdate
 )
 
 app = FastAPI()
@@ -35,8 +35,8 @@ def get_order(order_id: int, db: Session = Depends(get_db)):
     return order
 
 @app.post("/api/orders", response_model=OrderRead, status_code=status.HTTP_201_CREATED)
-def create_order(payload: CartItemCreate, db: Session = Depends(get_db)):
-    order = OrderDB(user_id=1, total_amount=payload.price * payload.quantity)
+def create_order(payload: OrderCreate, db: Session = Depends(get_db)):
+    order = OrderDB(user_id=payload.user_id, total_amount=payload.price * payload.quantity)
     db.add(order)
     db.commit()
     db.refresh(order)

@@ -1,8 +1,8 @@
 """Test File for Order Service"""
 
-def order_payload(item_name="Pizza", price=15.99, quantity=2):
+def order_payload(item_name="Pizza", price=15.99, quantity=2, user_id=1):
     """Builder for order item object"""
-    return {"item_name": item_name, "price": price, "quantity": quantity}
+    return {"item_name": item_name, "price": price, "quantity": quantity, "user_id": user_id}
 
 def test_create_order_ok(client):
     """Tests post method for creating an order"""
