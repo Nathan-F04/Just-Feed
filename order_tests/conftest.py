@@ -1,6 +1,5 @@
 """Order test configs"""
 
-from fastapi.testclient import TestClient
 from order_service.orders import app, get_db
 import pytest
 from fastapi.testclient import TestClient
