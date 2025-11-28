@@ -1,5 +1,5 @@
 # Microservice Makefile
-ORDER_APP = Src.order_service.orders:app
+ORDER_APP = order_service.orders:app
 PID_FILE = .uvicorn.pid
 
 install:
