@@ -12,20 +12,26 @@ PositiveFloat = Annotated[float, Ge(0.01)]
 # Cart Item schemas
 class CartItemCreate(BaseModel):
     item_name: str = Field(min_length=1, max_length=100)
+    image: Optional[str] = Field(None, max_length=255)
     price: PositiveFloat
+    description: Optional[str] = Field(None, max_length=500)
     quantity: PositiveInt
 
 class OrderCreate(BaseModel):
     user_id: PositiveInt
     item_name: str = Field(min_length=1, max_length=100)
+    image: Optional[str] = Field(None, max_length=255)
     price: PositiveFloat
+    description: Optional[str] = Field(None, max_length=500)
     quantity: PositiveInt
 
 class CartItemRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
     item_name: str = Field(max_length=200)
+    image: Optional[str] = None
     price: float
+    description: Optional[str] = None
     quantity: int
 
 class CartItemUpdate(BaseModel):
@@ -44,7 +50,9 @@ class OrderItemRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
     item_name: str = Field(max_length=200)
+    image: Optional[str] = None
     price: float
+    description: Optional[str] = None
     quantity: int
 
 # Order schemas

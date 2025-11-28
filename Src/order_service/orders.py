@@ -44,7 +44,9 @@ def create_order(payload: OrderCreate, db: Session = Depends(get_db)):
     order_item = OrderItemDB(
         order_id=order.id,
         item_name=payload.item_name,
+        image=payload.image,
         price=payload.price,
+        description=payload.description,
         quantity=payload.quantity
     )
     db.add(order_item)
