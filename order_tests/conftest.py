@@ -1,11 +1,11 @@
-"""Login test configs"""
+"""Order test configs"""
 
+from order_service.orders import app, get_db
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from Src.login_service.login import app, get_db
-from Src.login_service.models import Base
+from order_service.models import Base
 from sqlalchemy.pool import StaticPool
 
 TEST_DB_URL = "sqlite+pysqlite:///:memory:"
