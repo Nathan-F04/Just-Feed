@@ -8,10 +8,10 @@ install:
 freeze:
 	pip freeze > requirements.txt
 
-run-order:
+run:
 	python -m uvicorn $(ORDER_APP) --host 0.0.0.0 --port 8003 --reload
 
-start-order:
+start:
 	nohup python -m uvicorn $(ORDER_APP) --host 0.0.0.0 --port 8003 --reload \
 	> .uvicorn.out 2>&1 & echo $$! > $(PID_FILE)
 	@echo "Order service started (PID=$$(cat $(PID_FILE))) on http://localhost:8003"
